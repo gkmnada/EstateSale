@@ -117,9 +117,8 @@ namespace PresentationAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("category_id")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("category_id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("city")
                         .IsRequired()

@@ -72,7 +72,7 @@ namespace PresentationAPI.Migrations
                     district = table.Column<string>(type: "text", nullable: false),
                     address = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
-                    category_id = table.Column<string>(type: "text", nullable: false),
+                    category_id = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>

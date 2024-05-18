@@ -11,7 +11,7 @@ using PresentationAPI.Context;
 namespace PresentationAPI.Migrations
 {
     [DbContext(typeof(DapperContext))]
-    [Migration("20240518163637_create_database")]
+    [Migration("20240518173459_create_database")]
     partial class create_database
     {
         /// <inheritdoc />
@@ -120,9 +120,8 @@ namespace PresentationAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("category_id")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("category_id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("city")
                         .IsRequired()

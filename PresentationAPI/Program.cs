@@ -1,11 +1,13 @@
 using PresentationAPI.Context;
 using PresentationAPI.Services.CategoryServices;
+using PresentationAPI.Services.EstateServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddTransient<DapperContext>();
 
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<IEstateService, EstateService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

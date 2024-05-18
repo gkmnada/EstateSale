@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PresentationAPI.Entities
+﻿namespace PresentationAPI.Dtos.EmployeeDto
 {
-    public class Employee
+    public class UpdateEmployeeDto
     {
-        [Key]
         public int employee_id { get; set; }
         public string name { get; set; }
         public string title { get; set; }

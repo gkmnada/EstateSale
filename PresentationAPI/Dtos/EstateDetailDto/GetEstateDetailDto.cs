@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PresentationAPI.Entities
+﻿namespace PresentationAPI.Dtos.EstateDetailDto
 {
-    public class EstateDetail
+    public class GetEstateDetailDto
     {
-        [Key]
         public int estate_detail_id { get; set; }
         public int estate_size { get; set; }
         public int bedroom { get; set; }

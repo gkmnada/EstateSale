@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PresentationAPI.Entities
+﻿namespace PresentationAPI.Dtos.CategoryDto
 {
-    public class Category
+    public class UpdateCategoryDto
     {
-        [Key]
         public int category_id { get; set; }
         public string category_name { get; set; }
         public bool status { get; set; }

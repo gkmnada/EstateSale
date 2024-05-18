@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PresentationAPI.Entities
+﻿namespace PresentationAPI.Dtos.EstateDto
 {
-    public class Estate
+    public class CreateEstateDto
     {
-        [Key]
         public int estate_id { get; set; }
         public string title { get; set; }
         public decimal price { get; set; }

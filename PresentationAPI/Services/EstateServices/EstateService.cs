@@ -15,7 +15,7 @@ namespace PresentationAPI.Services.EstateServices
 
         public async Task CreateEstateAsync(CreateEstateDto createEstateDto)
         {
-            string query = "insert into estate (title, price, image, city, district, address, description, category_id, status) values (@title, @price, @image, @city, @district, @address, @description, @category_id, @status)";
+            string query = "insert into estate (title, price, image, city, district, address, description, sales_type, category_id, status) values (@title, @price, @image, @city, @district, @address, @description, @sales_type, @category_id, @status)";
             var parameters = new DynamicParameters();
             parameters.Add("@title", createEstateDto.title);
             parameters.Add("@price", createEstateDto.price);
@@ -24,6 +24,7 @@ namespace PresentationAPI.Services.EstateServices
             parameters.Add("@district", createEstateDto.district);
             parameters.Add("@address", createEstateDto.address);
             parameters.Add("@description", createEstateDto.description);
+            parameters.Add("@sales_type", createEstateDto.sales_type);
             parameters.Add("@category_id", createEstateDto.category_id);
             parameters.Add("@status", createEstateDto.status);
             using (var connection = _dapperContext.CreateConnection())
@@ -77,7 +78,7 @@ namespace PresentationAPI.Services.EstateServices
 
         public async Task UpdateEstateAsync(UpdateEstateDto updateEstateDto)
         {
-            string query = "update estate set title = @title, price = @price, image = @image, city = @city, district = @district, address = @address, description = @description, category_id = @category_id, status = @status where estate_id = @estate_id";
+            string query = "update estate set title = @title, price = @price, image = @image, city = @city, district = @district, address = @address, description = @description, sales_type = @sales_type, category_id = @category_id, status = @status where estate_id = @estate_id";
             var parameters = new DynamicParameters();
             parameters.Add("@title", updateEstateDto.title);
             parameters.Add("@price", updateEstateDto.price);
@@ -86,6 +87,7 @@ namespace PresentationAPI.Services.EstateServices
             parameters.Add("@district", updateEstateDto.district);
             parameters.Add("@address", updateEstateDto.address);
             parameters.Add("@description", updateEstateDto.description);
+            parameters.Add("@sales_type", updateEstateDto.sales_type);
             parameters.Add("@category_id", updateEstateDto.category_id);
             parameters.Add("@status", updateEstateDto.status);
             parameters.Add("@estate_id", updateEstateDto.estate_id);

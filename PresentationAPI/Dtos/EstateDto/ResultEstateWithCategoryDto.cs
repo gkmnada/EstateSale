@@ -10,6 +10,7 @@
         public string district { get; set; }
         public string address { get; set; }
         public string description { get; set; }
+        public string sales_type { get; set; }
         public string category_name { get; set; }
         public bool status { get; set; }
     }

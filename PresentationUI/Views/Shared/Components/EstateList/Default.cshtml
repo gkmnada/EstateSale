@@ -1,0 +1,28 @@
+﻿@model List<ResultEstateWithCategoryDto>
+
+<section class="locations-1" id="locations">
+    <div class="locations py-5">
+        <div class="container py-lg-5 py-md-4 py-2">
+            <div class="heading text-center mx-auto">
+                <h3 class="title-big">Yeni İlanlar</h3>
+            </div>
+            <div class="row pt-md-5 pt-4">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <a href="#">
+                            <div class="box16">
+                                <div class="rentext-listing-category"><span>@item.sales_type</span><span>@item.category_name</span></div>
+                                <img class="img-fluid" src="@item.image" alt="" style="height:270px;width:370px;">
+                                <div class="box-content">
+                                    <h3 class="title">₺@Convert.ToDecimal(@item.price).ToString("#,##0")</h3>
+                                    <span class="post">@item.district - @item.city</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

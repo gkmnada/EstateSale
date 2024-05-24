@@ -21,6 +21,67 @@ namespace PresentationAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("PresentationAPI.Entities.About", b =>
+                {
+                    b.Property<int>("about_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("about_id"));
+
+                    b.Property<string>("description1")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("description2")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("subtitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("about_id");
+
+                    b.ToTable("about");
+                });
+
+            modelBuilder.Entity("PresentationAPI.Entities.BottomGrid", b =>
+                {
+                    b.Property<int>("bottom_grid_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("bottom_grid_id"));
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("icon")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("bottom_grid_id");
+
+                    b.ToTable("bottom_grid");
+                });
+
             modelBuilder.Entity("PresentationAPI.Entities.Category", b =>
                 {
                     b.Property<int>("category_id")
@@ -139,6 +200,10 @@ namespace PresentationAPI.Migrations
                     b.Property<decimal>("price")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("sales_type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("status")
                         .HasColumnType("boolean");
 
@@ -190,6 +255,50 @@ namespace PresentationAPI.Migrations
                     b.HasKey("estate_detail_id");
 
                     b.ToTable("estate_detail");
+                });
+
+            modelBuilder.Entity("PresentationAPI.Entities.PopularLocation", b =>
+                {
+                    b.Property<int>("location_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("location_id"));
+
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("location_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("location_id");
+
+                    b.ToTable("popular_location");
+                });
+
+            modelBuilder.Entity("PresentationAPI.Entities.Service", b =>
+                {
+                    b.Property<int>("service_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("service_id"));
+
+                    b.Property<string>("service_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("service_id");
+
+                    b.ToTable("service");
                 });
 #pragma warning restore 612, 618
         }

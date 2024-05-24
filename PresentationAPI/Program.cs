@@ -1,6 +1,9 @@
 using PresentationAPI.Context;
+using PresentationAPI.Services.AboutServices;
+using PresentationAPI.Services.BottomGridServices;
 using PresentationAPI.Services.CategoryServices;
 using PresentationAPI.Services.EstateServices;
+using PresentationAPI.Services.ServiceServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,9 @@ builder.Services.AddTransient<DapperContext>();
 
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IEstateService, EstateService>();
+builder.Services.AddTransient<IAboutService, AboutService>();
+builder.Services.AddTransient<IServiceService, ServiceService>();
+builder.Services.AddTransient<IBottomGridService, BottomGridService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -26,6 +26,10 @@ namespace PresentationAPI.Context
         public DbSet<Employee> employee { get; set; }
         public DbSet<Estate> estate { get; set; }
         public DbSet<EstateDetail> estate_detail { get; set; }
+        public DbSet<Service> service { get; set; }
+        public DbSet<About> about { get; set; }
+        public DbSet<BottomGrid> bottom_grid { get; set; }
+        public DbSet<PopularLocation> popular_location { get; set; }
 
         public IDbConnection CreateConnection() => new NpgsqlConnection(_connectionString);
     }

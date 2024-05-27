@@ -30,6 +30,7 @@ namespace PresentationAPI.Context
         public DbSet<About> about { get; set; }
         public DbSet<BottomGrid> bottom_grid { get; set; }
         public DbSet<PopularLocation> popular_location { get; set; }
+        public DbSet<Testimonial> testimonial { get; set; }
 
         public IDbConnection CreateConnection() => new NpgsqlConnection(_connectionString);
     }

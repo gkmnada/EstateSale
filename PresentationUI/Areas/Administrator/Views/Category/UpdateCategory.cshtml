@@ -1,0 +1,42 @@
+﻿@model CategoryViewModel
+
+@{
+    ViewData["Title"] = "UpdateCategory";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">Kategori Güncelle</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Kategoriler</a></li>
+                    <li class="breadcrumb-item active">Kategori Güncelle</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txt-category">Kategori Adı</label>
+                                <input class="form-control" id="txt-category" value="@Model.GetCategoryDto.category_name" asp-for="UpdateCategoryDto.category_name" placeholder="Kategori Adı Giriniz" />
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" value="@Model.GetCategoryDto.category_id" asp-for="UpdateCategoryDto.category_id" />
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">Güncelle</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

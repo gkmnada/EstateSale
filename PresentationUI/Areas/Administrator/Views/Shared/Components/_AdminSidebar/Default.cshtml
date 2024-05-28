@@ -1,0 +1,61 @@
+﻿<div class="vertical-menu">
+    <div data-simplebar class="h-100">
+        <div class="navbar-brand-box">
+            <a asp-controller="Home" asp-action="Index" asp-area="Administrator" class="logo">
+                <span>Estate Sale</span>
+            </a>
+        </div>
+        <div id="sidebar-menu">
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Ana Sayfa</li>
+                <li>
+                    <a asp-controller="Home" asp-action="Index" asp-area="Administrator" class="waves-effect"><i class="feather-airplay"></i><span>Panelim</span></a>
+                </li>
+                <li class="menu-title">Tanımlamalar</li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"><i class="mdi mdi-view-list"></i><span>Kategoriler</span></a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a asp-controller="Category" asp-action="Index" asp-area="Administrator">Kategori Listesi</a></li>
+                        <li><a asp-controller="Category" asp-action="CreateCategory" asp-area="Administrator">Yeni Kategori Oluştur</a></li>
+                    </ul>
+                </li>
+                <li class="menu-title">Vitrin Sayfası</li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"><i class="mdi mdi-page-layout-header"></i><span>Banner</span></a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a asp-controller="Banner" asp-action="Index" asp-area="Administrator">Banner Listesi</a></li>
+                        <li><a asp-controller="Banner" asp-action="CreateBanner" asp-area="Administrator">Yeni Banner Oluştur</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"><i class="mdi mdi-information"></i><span>Hakkımızda</span></a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a asp-controller="About" asp-action="Index" asp-area="Administrator">Hakkımızda Listesi</a></li>
+                        <li><a asp-controller="About" asp-action="CreateAbout" asp-area="Administrator">Hakkımızda Bilgisi Oluştur</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"><i class="mdi mdi-briefcase-check"></i><span>Hizmetlerimiz</span></a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a asp-controller="Services" asp-action="Index" asp-area="Administrator">Hizmet Listesi</a></li>
+                        <li><a asp-controller="Services" asp-action="CreateService" asp-area="Administrator">Yeni Hizmet Oluştur</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"><i class="mdi mdi-account-multiple-check"></i><span>Referanslarımız</span></a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a asp-controller="Testimonial" asp-action="Index" asp-area="Administrator">Referans Listesi</a></li>
+                        <li><a asp-controller="Testimonial" asp-action="CreateTestimonial" asp-area="Administrator">Yeni Referans Oluştur</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"><i class="mdi mdi-page-layout-footer"></i><span>Footer</span></a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a asp-controller="Footer" asp-action="Index" asp-area="Administrator">Footer Listesi</a></li>
+                        <li><a asp-controller="Footer" asp-action="CreateFooter" asp-area="Administrator">Yeni Footer Oluştur</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

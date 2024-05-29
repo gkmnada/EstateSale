@@ -1,0 +1,95 @@
+﻿@model CreateEstateDto
+
+@{
+    ViewData["Title"] = "CreateEstate";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">Yeni İlan Oluştur</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">İlanlar</a></li>
+                    <li class="breadcrumb-item active">Yeni İlan Oluştur</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-title">İlan Başlığı</label>
+                                <input class="form-control" id="txt-title" asp-for="title" placeholder="İlan Başlığı Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-image">İlan Resmi</label>
+                                <input class="form-control" id="txt-image" asp-for="image" placeholder="İlan Resmi Seçiniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="select-category">Kategori</label>
+                                <select class="form-control" id="select-category" asp-items="@ViewBag.Category" asp-for="category_id">
+                                    <option value="0">Kategori Seçiniz</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="select-type">Satış Türü</label>
+                                <select class="form-control" id="select-type" asp-for="sales_type">
+                                    <option value="Satış Türü Seçiniz">Satış Türü Seçiniz</option>
+                                    <option value="Kiralık">Kiralık</option>
+                                    <option value="Satılık">Satılık</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-city">Şehir</label>
+                                <input class="form-control" id="txt-city" asp-for="city" placeholder="Şehir Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-district">İlçe</label>
+                                <input class="form-control" id="txt-district" asp-for="district" placeholder="İlçe Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-address">Adres</label>
+                                <input class="form-control" id="txt-address" asp-for="address" placeholder="Adres Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-price">Fiyat</label>
+                                <input class="form-control" id="txt-price" asp-for="price" placeholder="Fiyat Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txt-description">Açıklama</label>
+                                <textarea class="form-control" id="txt-description" asp-for="description" placeholder="Açıklama Giriniz" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">Yeni İlan Oluştur</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

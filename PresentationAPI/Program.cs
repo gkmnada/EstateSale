@@ -2,6 +2,9 @@ using PresentationAPI.Context;
 using PresentationAPI.Services.AboutServices;
 using PresentationAPI.Services.BottomGridServices;
 using PresentationAPI.Services.CategoryServices;
+using PresentationAPI.Services.ClientServices;
+using PresentationAPI.Services.EmployeeServices;
+using PresentationAPI.Services.EstateDetailServices;
 using PresentationAPI.Services.EstateServices;
 using PresentationAPI.Services.PopularLocationServices;
 using PresentationAPI.Services.ServiceServices;
@@ -18,6 +21,9 @@ builder.Services.AddTransient<IServiceService, ServiceService>();
 builder.Services.AddTransient<IBottomGridService, BottomGridService>();
 builder.Services.AddTransient<IPopularLocationService, PopularLocationService>();
 builder.Services.AddTransient<ITestimonialService, TestimonialService>();
+builder.Services.AddTransient<IEmployeeService, EmployeeService>();
+builder.Services.AddTransient<IClientService, ClientService>();
+builder.Services.AddTransient<IEstateDetailService, EstateDetailService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

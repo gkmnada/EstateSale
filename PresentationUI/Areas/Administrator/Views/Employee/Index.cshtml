@@ -1,0 +1,63 @@
+﻿@model List<ResultEmployeeDto>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">Personel Listesi</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Personeller</a></li>
+                    <li class="breadcrumb-item active">Personel Listesi</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Personel Listesi</h4>
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Personel Adı-Soyadı</th>
+                                <th>Unvan</th>
+                                <th>Mail Adresi</th>
+                                <th>Telefon Numarası</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                count++;
+                                <tr>
+                                    <td>@count</td>
+                                    <td>@item.name</td>
+                                    <td>@item.title</td>
+                                    <td>@item.mail</td>
+                                    <td>@item.phone</td>
+                                    <td>
+                                        <a href="/Administrator/Employee/UpdateEmployee?id=@item.employee_id" class="btn btn-secondary btn-rounded waves-effect waves-light">Güncelle</a>
+                                        <a href="/Administrator/Employee/DeleteEmployee?id=@item.employee_id" class="btn btn-danger btn-rounded waves-effect waves-light">Sil</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

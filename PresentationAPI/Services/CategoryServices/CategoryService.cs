@@ -18,7 +18,7 @@ namespace PresentationAPI.Services.CategoryServices
             string query = "insert into category (category_name, status) values (@category_name, @status)";
             var parameters = new DynamicParameters();
             parameters.Add("@category_name", createCategoryDto.category_name);
-            parameters.Add("@status", createCategoryDto.status);
+            parameters.Add("@status", true);
             using (var connection = _dapperContext.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
@@ -60,10 +60,9 @@ namespace PresentationAPI.Services.CategoryServices
 
         public async Task UpdateCategoryAsync(UpdateCategoryDto updateCategoryDto)
         {
-            string query = "update category set category_name = @category_name, status = @status where category_id = @category_id";
+            string query = "update category set category_name = @category_name where category_id = @category_id";
             var parameters = new DynamicParameters();
             parameters.Add("@category_name", updateCategoryDto.category_name);
-            parameters.Add("@status", updateCategoryDto.status);
             parameters.Add("@category_id", updateCategoryDto.category_id);
             using (var connection = _dapperContext.CreateConnection())
             {

@@ -20,7 +20,7 @@ namespace PresentationAPI.Services.TestimonialServices
             parameters.Add("@name", createTestimonialDto.name);
             parameters.Add("@title", createTestimonialDto.title);
             parameters.Add("@comment", createTestimonialDto.comment);
-            parameters.Add("@status", createTestimonialDto.status);
+            parameters.Add("@status", true);
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
@@ -62,12 +62,11 @@ namespace PresentationAPI.Services.TestimonialServices
 
         public async Task UpdateTestimonialAsync(UpdateTestimonialDto updateTestimonialDto)
         {
-            string query = "update testimonial set name = @name, title = @title, comment = @comment, status = @status where testimonial_id = @testimonial_id";
+            string query = "update testimonial set name = @name, title = @title, comment = @comment where testimonial_id = @testimonial_id";
             var parameters = new DynamicParameters();
             parameters.Add("@name", updateTestimonialDto.name);
             parameters.Add("@title", updateTestimonialDto.title);
             parameters.Add("@comment", updateTestimonialDto.comment);
-            parameters.Add("@status", updateTestimonialDto.status);
             parameters.Add("@testimonial_id", updateTestimonialDto.testimonial_id);
             using (var connection = _context.CreateConnection())
             {

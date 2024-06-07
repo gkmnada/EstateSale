@@ -8,6 +8,5 @@
         public string description1 { get; set; }
         public string description2 { get; set; }
         public string image { get; set; }
-        public bool status { get; set; }
     }
 }

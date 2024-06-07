@@ -26,7 +26,7 @@ namespace PresentationAPI.Services.EstateServices
             parameters.Add("@description", createEstateDto.description);
             parameters.Add("@sales_type", createEstateDto.sales_type);
             parameters.Add("@category_id", createEstateDto.category_id);
-            parameters.Add("@status", createEstateDto.status);
+            parameters.Add("@status", true);
             using (var connection = _dapperContext.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
@@ -78,7 +78,7 @@ namespace PresentationAPI.Services.EstateServices
 
         public async Task UpdateEstateAsync(UpdateEstateDto updateEstateDto)
         {
-            string query = "update estate set title = @title, price = @price, image = @image, city = @city, district = @district, address = @address, description = @description, sales_type = @sales_type, category_id = @category_id, status = @status where estate_id = @estate_id";
+            string query = "update estate set title = @title, price = @price, image = @image, city = @city, district = @district, address = @address, description = @description, sales_type = @sales_type, category_id = @category_id where estate_id = @estate_id";
             var parameters = new DynamicParameters();
             parameters.Add("@title", updateEstateDto.title);
             parameters.Add("@price", updateEstateDto.price);
@@ -89,7 +89,6 @@ namespace PresentationAPI.Services.EstateServices
             parameters.Add("@description", updateEstateDto.description);
             parameters.Add("@sales_type", updateEstateDto.sales_type);
             parameters.Add("@category_id", updateEstateDto.category_id);
-            parameters.Add("@status", updateEstateDto.status);
             parameters.Add("@estate_id", updateEstateDto.estate_id);
             using (var connection = _dapperContext.CreateConnection())
             {

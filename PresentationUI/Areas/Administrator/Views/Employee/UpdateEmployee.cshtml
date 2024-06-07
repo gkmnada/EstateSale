@@ -1,0 +1,66 @@
+﻿@model EmployeeViewModel
+
+@{
+    ViewData["Title"] = "UpdateEmployee";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">Personel Güncelle</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Personeller</a></li>
+                    <li class="breadcrumb-item active">Personel Güncelle</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-name">Personel Adı-Soyadı</label>
+                                <input class="form-control" id="txt-name" value="@Model.GetEmployeeDto.name" asp-for="UpdateEmployeeDto.name" placeholder="Adı-Soyadı Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-title">Unvan</label>
+                                <input class="form-control" id="txt-title" value="@Model.GetEmployeeDto.title" asp-for="UpdateEmployeeDto.title" placeholder="Unvan Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-mail">Mail Adresi</label>
+                                <input class="form-control" id="txt-mail" value="@Model.GetEmployeeDto.mail" asp-for="UpdateEmployeeDto.mail" placeholder="Mail Adresi Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-phone">Telefon Numarası</label>
+                                <input class="form-control" id="txt-phone" value="@Model.GetEmployeeDto.phone" asp-for="UpdateEmployeeDto.phone" placeholder="Telefon Numarası Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txt-image">Fotoğraf</label>
+                                <input class="form-control" id="txt-image" value="@Model.GetEmployeeDto.image" asp-for="UpdateEmployeeDto.image" placeholder="Fotoğraf Seçiniz" />
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" value="@Model.GetEmployeeDto.employee_id" asp-for="UpdateEmployeeDto.employee_id" />
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">Güncelle</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

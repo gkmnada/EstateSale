@@ -1,0 +1,65 @@
+﻿@model CreateEmployeeDto
+
+@{
+    ViewData["Title"] = "CreateEmployee";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">Yeni Personel Oluştur</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Personeller</a></li>
+                    <li class="breadcrumb-item active">Yeni Personel Oluştur</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-name">Personel Adı-Soyadı</label>
+                                <input class="form-control" id="txt-name" asp-for="name" placeholder="Adı-Soyadı Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-title">Unvan</label>
+                                <input class="form-control" id="txt-title" asp-for="title" placeholder="Unvan Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-mail">Mail Adresi</label>
+                                <input class="form-control" id="txt-mail" asp-for="mail" placeholder="Mail Adresi Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-phone">Telefon Numarası</label>
+                                <input class="form-control" id="txt-phone" asp-for="phone" placeholder="Telefon Numarası Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txt-image">Fotoğraf</label>
+                                <input class="form-control" id="txt-image" asp-for="image" placeholder="Fotoğraf Seçiniz" />
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">Yeni Personel Oluştur</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

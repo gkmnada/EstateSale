@@ -22,7 +22,7 @@ namespace PresentationAPI.Services.AboutServices
             parameters.Add("@description1", createAboutDto.description1);
             parameters.Add("@description2", createAboutDto.description2);
             parameters.Add("@image", createAboutDto.image);
-            parameters.Add("@status", createAboutDto.status);
+            parameters.Add("@status", true);
             using (var connection = _dapperContext.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
@@ -64,14 +64,13 @@ namespace PresentationAPI.Services.AboutServices
 
         public async Task UpdateAboutAsync(UpdateAboutDto updateAboutDto)
         {
-            string query = "update about set title = @title, subtitle = @subtitle, description1 = @description1, description2 = @description2, image = @image, status = @status where about_id = @about_id";
+            string query = "update about set title = @title, subtitle = @subtitle, description1 = @description1, description2 = @description2, image = @image where about_id = @about_id";
             var parameters = new DynamicParameters();
             parameters.Add("@title", updateAboutDto.title);
             parameters.Add("@subtitle", updateAboutDto.subtitle);
             parameters.Add("@description1", updateAboutDto.description1);
             parameters.Add("@description2", updateAboutDto.description2);
             parameters.Add("@image", updateAboutDto.image);
-            parameters.Add("@status", updateAboutDto.status);
             parameters.Add("@about_id", updateAboutDto.about_id);
             using (var connection = _dapperContext.CreateConnection())
             {

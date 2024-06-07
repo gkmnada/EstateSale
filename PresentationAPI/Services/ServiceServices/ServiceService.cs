@@ -18,7 +18,7 @@ namespace PresentationAPI.Services.ServiceServices
             string query = "insert into service (service_name, status) values (@service_name, @status)";
             var parameters = new DynamicParameters();
             parameters.Add("@service_name", createServiceDto.service_name);
-            parameters.Add("@status", createServiceDto.status);
+            parameters.Add("@status", true);
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
@@ -60,11 +60,10 @@ namespace PresentationAPI.Services.ServiceServices
 
         public async Task UpdateServiceAsync(UpdateServiceDto updateServiceDto)
         {
-            string query = "update service set service_name = @service_name, status = @status where service_id = @service_id";
+            string query = "update service set service_name = @service_name where service_id = @service_id";
             var parameters = new DynamicParameters();
             parameters.Add("@service_id", updateServiceDto.service_id);
             parameters.Add("@service_name", updateServiceDto.service_name);
-            parameters.Add("@status", updateServiceDto.status);
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);

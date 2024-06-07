@@ -1,0 +1,8 @@
+﻿namespace PresentationUI.Dtos.PopularLocationDto
+{
+    public class CreatePopularLocationDto
+    {
+        public string location_name { get; set; }
+        public string image { get; set; }
+    }
+}

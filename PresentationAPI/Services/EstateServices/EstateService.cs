@@ -15,7 +15,7 @@ namespace PresentationAPI.Services.EstateServices
 
         public async Task CreateEstateAsync(CreateEstateDto createEstateDto)
         {
-            string query = "insert into estate (title, price, image, city, district, address, description, sales_type, category_id, status) values (@title, @price, @image, @city, @district, @address, @description, @sales_type, @category_id, @status)";
+            string query = "insert into estate (title, price, image, city, district, address, description, sales_type, category_id, deal_of_day, status) values (@title, @price, @image, @city, @district, @address, @description, @sales_type, @category_id, @deal_of_day, @status)";
             var parameters = new DynamicParameters();
             parameters.Add("@title", createEstateDto.title);
             parameters.Add("@price", createEstateDto.price);
@@ -25,6 +25,7 @@ namespace PresentationAPI.Services.EstateServices
             parameters.Add("@address", createEstateDto.address);
             parameters.Add("@description", createEstateDto.description);
             parameters.Add("@sales_type", createEstateDto.sales_type);
+            parameters.Add("@deal_of_day", false);
             parameters.Add("@category_id", createEstateDto.category_id);
             parameters.Add("@status", true);
             using (var connection = _dapperContext.CreateConnection())
@@ -68,11 +69,45 @@ namespace PresentationAPI.Services.EstateServices
 
         public async Task<List<ResultEstateWithCategoryDto>> ListEstateWithCategoryAsync()
         {
-            string query = "select e.*, c.category_name from estate e join category c on e.category_id = c.category_id";
+            string query = "select e.*, c.category_name from estate e join category c on e.category_id = c.category_id order by estate_id";
             using (var connection = _dapperContext.CreateConnection())
             {
                 var values = await connection.QueryAsync<ResultEstateWithCategoryDto>(query);
                 return values.ToList();
+            }
+        }
+
+        public async Task<List<ResultEstateWithCategoryDto>> ListLastEstateAsync()
+        {
+            string query = "select e.*, c.category_name from estate e join category c on e.category_id = c.category_id order by estate_id desc limit 5";
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                var values = await connection.QueryAsync<ResultEstateWithCategoryDto>(query);
+                return values.ToList();
+            }
+        }
+
+        public async Task UpdateDealOfDayChangeToFalseAsync(int id)
+        {
+            string query = "update estate set deal_of_day = @deal_of_day where estate_id = @estate_id";
+            var parameters = new DynamicParameters();
+            parameters.Add("@deal_of_day", false);
+            parameters.Add("@estate_id", id);
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(query, parameters);
+            }
+        }
+
+        public async Task UpdateDealOfDayChangeToTrueAsync(int id)
+        {
+            string query = "update estate set deal_of_day = @deal_of_day where estate_id = @estate_id";
+            var parameters = new DynamicParameters();
+            parameters.Add("@deal_of_day", true);
+            parameters.Add("@estate_id", id);
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(query, parameters);
             }
         }
 

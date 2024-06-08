@@ -54,6 +54,14 @@
                                     <td>
                                         <a href="/Administrator/Estate/UpdateEstate?id=@item.estate_id" class="btn btn-secondary btn-rounded waves-effect waves-light">Güncelle</a>
                                         <a href="/Administrator/Estate/DeleteEstate?id=@item.estate_id" class="btn btn-danger btn-rounded waves-effect waves-light">Sil</a>
+                                        @if (item.deal_of_day == true)
+                                        {
+                                            <a href="/Administrator/Estate/ChangeToFalse?id=@item.estate_id" class="btn btn-dark btn-rounded waves-effect waves-light">Günün İlanından Kaldır</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/Administrator/Estate/ChangeToTrue?id=@item.estate_id" class="btn btn-light btn-rounded waves-effect waves-light">Günün İlanı Seç</a>
+                                        }
                                     </td>
                                 </tr>
                             }

@@ -1,0 +1,34 @@
+﻿@model List<ResultEstateWithCategoryDto>
+
+<div class="col-xl-6">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Son İlanlar</h4>
+            <div class="table-responsive">
+                <table class="table table-centered table-hover table-xl mb-0" id="recent-orders">
+                    <thead>
+                        <tr>
+                            <th class="border-top-0">Başlık</th>
+                            <th class="border-top-0">İl-İlçe</th>
+                            <th class="border-top-0">Satış Türü</th>
+                            <th class="border-top-0">Kategori</th>
+                            <th class="border-top-0">Fiyat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-truncate">@item.title</td>
+                                <td class="text-truncate">@item.city - @item.district</td>
+                                <td>@item.sales_type</td>
+                                <td>@item.category_name</td>
+                                <td class="text-truncate">@Convert.ToDecimal(item.price).ToString("#,##0") ₺</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

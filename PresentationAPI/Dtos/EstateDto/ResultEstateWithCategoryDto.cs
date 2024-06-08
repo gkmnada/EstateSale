@@ -12,6 +12,7 @@
         public string description { get; set; }
         public string sales_type { get; set; }
         public string category_name { get; set; }
+        public bool deal_of_day { get; set; }
         public bool status { get; set; }
     }
 }

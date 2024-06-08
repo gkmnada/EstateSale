@@ -124,5 +124,27 @@ namespace PresentationUI.Areas.Administrator.Controllers
             }
             return View();
         }
+
+        public async Task<IActionResult> ChangeToTrue(int id)
+        {
+            var client = _clientFactory.CreateClient();
+            var response = await client.GetAsync("https://localhost:7071/api/Estate/UpdateDealOfDayChangeToTrue?id=" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Estate", new { area = "Administrator" });
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> ChangeToFalse(int id)
+        {
+            var client = _clientFactory.CreateClient();
+            var response = await client.GetAsync("https://localhost:7071/api/Estate/UpdateDealOfDayChangeToFalse?id=" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Estate", new { area = "Administrator" });
+            }
+            return View();
+        }
     }
 }

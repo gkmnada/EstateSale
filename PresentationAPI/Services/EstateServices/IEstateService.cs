@@ -10,5 +10,8 @@ namespace PresentationAPI.Services.EstateServices
         Task DeleteEstateAsync(int id);
         Task<GetEstateDto> GetEstateAsync(int id);
         Task<List<ResultEstateWithCategoryDto>> ListEstateWithCategoryAsync();
+        Task UpdateDealOfDayChangeToTrueAsync(int id);
+        Task UpdateDealOfDayChangeToFalseAsync(int id);
+        Task<List<ResultEstateWithCategoryDto>> ListLastEstateAsync();
     }
 }

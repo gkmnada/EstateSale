@@ -57,5 +57,26 @@ namespace PresentationAPI.Controllers
             var values = await _estateService.ListEstateWithCategoryAsync();
             return Ok(values);
         }
+
+        [HttpGet("UpdateDealOfDayChangeToFalse")]
+        public async Task<IActionResult> UpdateDealOfDayChangeToFalse(int id)
+        {
+            await _estateService.UpdateDealOfDayChangeToFalseAsync(id);
+            return Ok("Başarılı");
+        }
+
+        [HttpGet("UpdateDealOfDayChangeToTrue")]
+        public async Task<IActionResult> UpdateDealOfDayChangeToTrue(int id)
+        {
+            await _estateService.UpdateDealOfDayChangeToTrueAsync(id);
+            return Ok("Başarılı");
+        }
+
+        [HttpGet("ListLastEstate")]
+        public async Task<IActionResult> ListLastEstate()
+        {
+            var values = await _estateService.ListLastEstateAsync();
+            return Ok(values);
+        }
     }
 }

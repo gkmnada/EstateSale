@@ -3,5 +3,91 @@
     Layout = "~/Areas/Administrator/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h4>Index</h4>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">Panelim</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item active">Panelim</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-primary border-primary">
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5 class="card-title mb-0 text-white">Aktif Kategori Sayısı</h5>
+                </div>
+                <div class="row d-flex align-items-center mb-4">
+                    <div class="col-12">
+                        <h2 class="d-flex align-items-center text-white mb-0">
+                            @ViewBag.CategoryCount Adet
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-secondary border-secondary">
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5 class="card-title mb-0 text-white">Toplam İlan Sayısı</h5>
+                </div>
+                <div class="row d-flex align-items-center mb-4">
+                    <div class="col-12">
+                        <h2 class="d-flex align-items-center mb-0 text-white">
+                            @ViewBag.EstateCount Adet
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-warning border-warning">
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5 class="card-title mb-0 text-white">Kiralık Fiyat Ortalaması</h5>
+                </div>
+                <div class="row d-flex align-items-center mb-4">
+                    <div class="col-12">
+                        <h2 class="d-flex align-items-center text-white mb-0">
+                            @Convert.ToDecimal(ViewBag.AverageEstatePriceByRent).ToString("#,##0") ₺
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-dark border-dark">
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5 class="card-title mb-0 text-white">Satılık Fiyat Ortalaması</h5>
+                </div>
+                <div class="row d-flex align-items-center mb-4">
+                    <div class="col-12">
+                        <h2 class="d-flex align-items-center text-white mb-0">
+                            @Convert.ToDecimal(ViewBag.AverageEstatePriceBySale).ToString("#,##0") ₺
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @await Component.InvokeAsync("_AdminHomeEstateList")
+
+    @await Component.InvokeAsync("_AdminHomeMessageList")
+</div>
 

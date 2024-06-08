@@ -8,6 +8,7 @@ using PresentationAPI.Services.EstateDetailServices;
 using PresentationAPI.Services.EstateServices;
 using PresentationAPI.Services.PopularLocationServices;
 using PresentationAPI.Services.ServiceServices;
+using PresentationAPI.Services.StatisticServices;
 using PresentationAPI.Services.TestimonialServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,7 @@ builder.Services.AddTransient<ITestimonialService, TestimonialService>();
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddTransient<IClientService, ClientService>();
 builder.Services.AddTransient<IEstateDetailService, EstateDetailService>();
+builder.Services.AddTransient<IStatisticService, StatisticService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

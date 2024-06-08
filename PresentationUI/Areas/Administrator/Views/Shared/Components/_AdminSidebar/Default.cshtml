@@ -27,6 +27,13 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"><i class="mdi mdi-map-marker-multiple"></i><span>Lokasyonlar</span></a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a asp-controller="Location" asp-action="Index" asp-area="Administrator">Lokasyon Listesi</a></li>
+                        <li><a asp-controller="Location" asp-action="CreateLocation" asp-area="Administrator">Yeni Lokasyon Oluştur</a></li>
+                    </ul>
+                </li>
+                <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect"><i class="mdi mdi-account-multiple"></i><span>Personeller</span></a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a asp-controller="Employee" asp-action="Index" asp-area="Administrator">Personel Listesi</a></li>

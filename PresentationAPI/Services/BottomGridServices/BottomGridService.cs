@@ -15,7 +15,7 @@ namespace PresentationAPI.Services.BottomGridServices
 
         public async Task CreateBottomGridAsync(CreateBottomGridDto createBottomGridDto)
         {
-            string query = "insert into bottom_grid (title, descriptioni icon) values (@title, @description, @icon)";
+            string query = "insert into bottom_grid (title, description, icon) values (@title, @description, @icon)";
             var parameters = new DynamicParameters();
             parameters.Add("@title", createBottomGridDto.title);
             parameters.Add("@description", createBottomGridDto.description);

@@ -1,0 +1,53 @@
+﻿@model CreateTestimonialDto
+
+@{
+    ViewData["Title"] = "CreateTestimonial";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">Yeni Referans Oluştur</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Referanslarımız</a></li>
+                    <li class="breadcrumb-item active">Yeni Referans Oluştur</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-name">Adı-Soyadı</label>
+                                <input class="form-control" id="txt-name" asp-for="name" placeholder="Adı-Soyadı Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-title">Unvan</label>
+                                <input class="form-control" id="txt-title" asp-for="title" placeholder="Unvan Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txt-comment">Yorum</label>
+                                <textarea class="form-control" id="txt-comment" asp-for="comment" placeholder="Yorum Giriniz" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">Yeni Referans Oluştur</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

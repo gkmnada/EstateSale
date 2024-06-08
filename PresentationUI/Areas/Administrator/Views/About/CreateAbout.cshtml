@@ -1,0 +1,65 @@
+﻿@model CreateAboutDto
+
+@{
+    ViewData["Title"] = "CreateAbout";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">Hakkımızda Bilgisi Oluştur</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Hakkımızda</a></li>
+                    <li class="breadcrumb-item active">Hakkımızda Bilgisi Oluştur</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-title">Başlık</label>
+                                <input class="form-control" id="txt-title" asp-for="title" placeholder="Başlık Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="txt-subtitle">Alt Başlık</label>
+                                <input class="form-control" id="txt-subtitle" asp-for="subtitle" placeholder="Alt Başlık Giriniz" />
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txt-description-1">Açıklama-1</label>
+                                <textarea class="form-control" id="txt-description-1" asp-for="description1" placeholder="Açıklama Giriniz" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txt-description-2">Açıklama-2</label>
+                                <textarea class="form-control" id="txt-description-2" asp-for="description2" placeholder="Açıklama Giriniz" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="form-group">
+                                <label for="txt-image">Hakkımızda Görseli</label>
+                                <input class="form-control" id="txt-image" asp-for="image" placeholder="Hakkımızda Görseli Seçiniz" />
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary waves-effect waves-light">Hakkımızda Bilgisi Oluştur</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

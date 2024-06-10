@@ -15,7 +15,7 @@ namespace PresentationAPI.Services.EstateServices
 
         public async Task CreateEstateAsync(CreateEstateDto createEstateDto)
         {
-            string query = "insert into estate (title, price, image, city, district, address, description, sales_type, category_id, deal_of_day, status) values (@title, @price, @image, @city, @district, @address, @description, @sales_type, @category_id, @deal_of_day, @status)";
+            string query = "insert into estate (title, price, image, city, district, address, description, sales_type, category_id, employee_id, deal_of_day, status) values (@title, @price, @image, @city, @district, @address, @description, @sales_type, @category_id, @employee_id, @deal_of_day, @status)";
             var parameters = new DynamicParameters();
             parameters.Add("@title", createEstateDto.title);
             parameters.Add("@price", createEstateDto.price);
@@ -27,6 +27,7 @@ namespace PresentationAPI.Services.EstateServices
             parameters.Add("@sales_type", createEstateDto.sales_type);
             parameters.Add("@deal_of_day", false);
             parameters.Add("@category_id", createEstateDto.category_id);
+            parameters.Add("@employee_id", createEstateDto.employee_id);
             parameters.Add("@status", true);
             using (var connection = _dapperContext.CreateConnection())
             {
@@ -113,7 +114,7 @@ namespace PresentationAPI.Services.EstateServices
 
         public async Task UpdateEstateAsync(UpdateEstateDto updateEstateDto)
         {
-            string query = "update estate set title = @title, price = @price, image = @image, city = @city, district = @district, address = @address, description = @description, sales_type = @sales_type, category_id = @category_id where estate_id = @estate_id";
+            string query = "update estate set title = @title, price = @price, image = @image, city = @city, district = @district, address = @address, description = @description, sales_type = @sales_type, category_id = @category_id, employee_id = @employee_id where estate_id = @estate_id";
             var parameters = new DynamicParameters();
             parameters.Add("@title", updateEstateDto.title);
             parameters.Add("@price", updateEstateDto.price);
@@ -124,6 +125,7 @@ namespace PresentationAPI.Services.EstateServices
             parameters.Add("@description", updateEstateDto.description);
             parameters.Add("@sales_type", updateEstateDto.sales_type);
             parameters.Add("@category_id", updateEstateDto.category_id);
+            parameters.Add("@employee_id", updateEstateDto.employee_id);
             parameters.Add("@estate_id", updateEstateDto.estate_id);
             using (var connection = _dapperContext.CreateConnection())
             {

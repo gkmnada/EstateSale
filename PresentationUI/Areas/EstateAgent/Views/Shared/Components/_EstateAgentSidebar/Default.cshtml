@@ -1,0 +1,25 @@
+﻿<div class="vertical-menu">
+    <div data-simplebar class="h-100">
+        <div class="navbar-brand-box">
+            <a asp-controller="Home" asp-action="Index" asp-area="EstateAgent" class="logo">
+                <span>Estate Sale</span>
+            </a>
+        </div>
+        <div id="sidebar-menu">
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Ana Sayfa</li>
+                <li>
+                    <a asp-controller="Home" asp-action="Index" asp-area="EstateAgent" class="waves-effect"><i class="feather-airplay"></i><span>Panelim</span></a>
+                </li>
+                <li class="menu-title">İşlemler</li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect"><i class="mdi mdi-file-document-box-search"></i><span>İlanlar</span></a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a asp-controller="Estate" asp-action="Index" asp-area="EstateAgent">İlan Listesi</a></li>
+                        <li><a asp-controller="Estate" asp-action="CreateEstate" asp-area="EstateAgent">Yeni İlan Oluştur</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

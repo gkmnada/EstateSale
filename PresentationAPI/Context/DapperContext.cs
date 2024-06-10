@@ -35,6 +35,8 @@ namespace PresentationAPI.Context
         public DbSet<Contact> contact { get; set; }
         public DbSet<SocialMedia> social_media { get; set; }
         public DbSet<Subscribe> subscribe { get; set; }
+        public DbSet<AppUser> app_user { get; set; }
+        public DbSet<AppRole> app_role { get; set; }
 
         public IDbConnection CreateConnection() => new NpgsqlConnection(_connectionString);
     }

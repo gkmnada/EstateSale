@@ -83,6 +83,55 @@ namespace PresentationAPI.Migrations
                     b.ToTable("address");
                 });
 
+            modelBuilder.Entity("PresentationAPI.Entities.AppRole", b =>
+                {
+                    b.Property<int>("app_role_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("app_role_id"));
+
+                    b.Property<string>("role_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("app_role_id");
+
+                    b.ToTable("app_role");
+                });
+
+            modelBuilder.Entity("PresentationAPI.Entities.AppUser", b =>
+                {
+                    b.Property<int>("app_user_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("app_user_id"));
+
+                    b.Property<int>("app_role_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("app_user_id");
+
+                    b.ToTable("app_user");
+                });
+
             modelBuilder.Entity("PresentationAPI.Entities.BottomGrid", b =>
                 {
                     b.Property<int>("bottom_grid_id")
@@ -249,6 +298,9 @@ namespace PresentationAPI.Migrations
                     b.Property<string>("district")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("employee_id")
+                        .HasColumnType("integer");
 
                     b.Property<string>("image")
                         .IsRequired()

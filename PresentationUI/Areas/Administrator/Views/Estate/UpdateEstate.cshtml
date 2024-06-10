@@ -82,6 +82,17 @@
                                 <input class="form-control" id="txt-price" value="@Model.GetEstateDto.price" asp-for="UpdateEstateDto.price" placeholder="Fiyat Giriniz" />
                             </div>
                         </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="select-employee">İlanı Oluşturan Kullanıcı</label>
+                                <select class="form-control" id="select-employee" asp-for="UpdateEstateDto.employee_id">
+                                    @foreach (var item in ViewBag.Employee)
+                                    {
+                                        <option value="@item.Value" selected="@(ViewBag.SelectedEmployee == item.Value)">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-xl-12">
                             <div class="form-group">
                                 <label for="txt-description">Açıklama</label>

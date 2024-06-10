@@ -79,6 +79,14 @@
                                 <input class="form-control" id="txt-price" asp-for="price" placeholder="Fiyat Giriniz" />
                             </div>
                         </div>
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                <label for="select-employee">İlanı Oluşturan Kullanıcı</label>
+                                <select class="form-control" id="select-employee" asp-items="@ViewBag.Employee" asp-for="employee_id">
+                                    <option value="0">Kullanıcı Seçiniz</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-xl-12">
                             <div class="form-group">
                                 <label for="txt-description">Açıklama</label>

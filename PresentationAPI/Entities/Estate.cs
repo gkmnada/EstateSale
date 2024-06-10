@@ -15,6 +15,7 @@ namespace PresentationAPI.Entities
         public string description { get; set; }
         public string sales_type { get; set; }
         public int category_id { get; set; }
+        public int employee_id { get; set; }
         public bool deal_of_day { get; set; }
         public bool status { get; set; }
     }

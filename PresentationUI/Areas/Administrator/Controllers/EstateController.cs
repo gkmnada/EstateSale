@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using PresentationUI.Areas.Administrator.Models;
 using PresentationUI.Dtos.CategoryDto;
+using PresentationUI.Dtos.EmployeeDto;
 using PresentationUI.Dtos.EstateDto;
 using System.Text;
 
@@ -49,6 +50,21 @@ namespace PresentationUI.Areas.Administrator.Controllers
                                                      }).ToList();
                 ViewBag.Category = listCategory;
             }
+
+            var response2 = await client.GetAsync("https://localhost:7071/api/Employee");
+            if (response2.IsSuccessStatusCode)
+            {
+                var json = await response2.Content.ReadAsStringAsync();
+                var values = JsonConvert.DeserializeObject<List<ResultEmployeeDto>>(json);
+
+                List<SelectListItem> listEmployee = (from x in values
+                                                     select new SelectListItem
+                                                     {
+                                                         Text = x.name,
+                                                         Value = x.employee_id.ToString()
+                                                     }).ToList();
+                ViewBag.Employee = listEmployee;
+            }
             return View();
         }
 
@@ -88,6 +104,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
                 var values = JsonConvert.DeserializeObject<GetEstateDto>(json);
 
                 ViewBag.SelectedCategory = values.category_id.ToString();
+                ViewBag.SelectedEmployee = values.employee_id.ToString();
                 ViewBag.SelectedSalesType = values.sales_type;
 
                 var responseMessage = await client.GetAsync("https://localhost:7071/api/Category");
@@ -101,6 +118,18 @@ namespace PresentationUI.Areas.Administrator.Controllers
                                                          Value = x.category_id.ToString()
                                                      }).ToList();
                 ViewBag.Category = listCategory;
+
+                var responseMessage2 = await client.GetAsync("https://localhost:7071/api/Employee");
+                var jsonData2 = await responseMessage2.Content.ReadAsStringAsync();
+                var employees = JsonConvert.DeserializeObject<List<ResultEmployeeDto>>(jsonData2);
+
+                List<SelectListItem> listEmployee = (from x in employees
+                                                     select new SelectListItem
+                                                     {
+                                                         Text = x.name,
+                                                         Value = x.employee_id.ToString()
+                                                     }).ToList();
+                ViewBag.Employee = listEmployee;
 
                 var estateViewModel = new EstateViewModel
                 {

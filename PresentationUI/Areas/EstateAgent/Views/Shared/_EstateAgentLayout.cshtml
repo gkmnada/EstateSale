@@ -1,0 +1,46 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Estate Sale - Emlak Yönetim Paneli</title>
+
+    <link rel="shortcut icon" href="/admin-template/assets/images/favicon.ico">
+
+    <link href="/admin-template/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/admin-template/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/admin-template/assets/css/theme.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div id="layout-wrapper">
+        @await Component.InvokeAsync("_EstateAgentHeader")
+
+        @await Component.InvokeAsync("_EstateAgentSidebar")
+
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+
+            @await Component.InvokeAsync("_EstateAgentFooter")
+        </div>
+    </div>
+
+    <div class="menu-overlay"></div>
+
+    <script src="/admin-template/assets/js/jquery.min.js"></script>
+    <script src="/admin-template/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin-template/assets/js/metismenu.min.js"></script>
+    <script src="/admin-template/assets/js/waves.js"></script>
+    <script src="/admin-template/assets/js/simplebar.min.js"></script>
+
+    <script src="/admin-template/assets/js/theme.js"></script>
+</body>
+</html>

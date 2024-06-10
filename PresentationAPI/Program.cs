@@ -1,4 +1,5 @@
 using PresentationAPI.Context;
+using PresentationAPI.Hubs;
 using PresentationAPI.Services.AboutServices;
 using PresentationAPI.Services.BottomGridServices;
 using PresentationAPI.Services.CategoryServices;
@@ -12,6 +13,8 @@ using PresentationAPI.Services.StatisticServices;
 using PresentationAPI.Services.TestimonialServices;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddTransient<DapperContext>();
 
@@ -27,6 +30,17 @@ builder.Services.AddTransient<IClientService, ClientService>();
 builder.Services.AddTransient<IEstateDetailService, EstateDetailService>();
 builder.Services.AddTransient<IStatisticService, StatisticService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder => builder
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed((host) => true)
+        .AllowCredentials());
+});
+
+builder.Services.AddSignalR();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -41,10 +55,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<AppHub>("/apphub");
 
 app.Run();

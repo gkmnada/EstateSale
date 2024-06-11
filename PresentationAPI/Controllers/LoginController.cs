@@ -28,12 +28,14 @@ namespace PresentationAPI.Controllers
             parameters.Add("@password", createLoginDto.password);
             using (var connection = _dapperContext.CreateConnection())
             {
-                var values = await connection.QueryFirstOrDefaultAsync<CreateLoginDto>(query, parameters);
+                var login = await connection.QueryFirstOrDefaultAsync<CreateLoginDto>(query, parameters);
+                var values = await connection.QueryFirstOrDefaultAsync<ResultLoginDto>(query, parameters);
 
-                if (values != null)
+                if (login != null)
                 {
                     GetCheckAppUserDto model = new GetCheckAppUserDto();
-                    model.Username = values.username;
+                    model.Id = values.app_user_id;
+                    model.Username = login.username;
                     var token = JwtTokenGenerator.GenerateToken(model);
                     return Ok(token);
                 }

@@ -15,7 +15,7 @@ namespace PresentationAPI.Services.EstateServices
 
         public async Task CreateEstateAsync(CreateEstateDto createEstateDto)
         {
-            string query = "insert into estate (title, price, image, city, district, address, description, sales_type, category_id, employee_id, deal_of_day, status) values (@title, @price, @image, @city, @district, @address, @description, @sales_type, @category_id, @employee_id, @deal_of_day, @status)";
+            string query = "insert into estate (title, price, image, city, district, address, description, sales_type, category_id, employee_id, deal_of_day, status, app_user_id) values (@title, @price, @image, @city, @district, @address, @description, @sales_type, @category_id, @employee_id, @deal_of_day, @status, @app_user_id)";
             var parameters = new DynamicParameters();
             parameters.Add("@title", createEstateDto.title);
             parameters.Add("@price", createEstateDto.price);
@@ -29,6 +29,7 @@ namespace PresentationAPI.Services.EstateServices
             parameters.Add("@category_id", createEstateDto.category_id);
             parameters.Add("@employee_id", createEstateDto.employee_id);
             parameters.Add("@status", true);
+            parameters.Add("@app_user_id", createEstateDto.app_user_id);
             using (var connection = _dapperContext.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
@@ -64,6 +65,18 @@ namespace PresentationAPI.Services.EstateServices
             using (var connection = _dapperContext.CreateConnection())
             {
                 var values = await connection.QueryAsync<ResultEstateDto>(query);
+                return values.ToList();
+            }
+        }
+
+        public async Task<List<ResultEstateWithCategoryDto>> ListEstateByEstateAgentAsync(int id)
+        {
+            string query = "select e.*, c.category_name from estate e join category c on e.category_id = c.category_id where app_user_id = @app_user_id order by estate_id";
+            var parameters = new DynamicParameters();
+            parameters.Add("@app_user_id", id);
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                var values = await connection.QueryAsync<ResultEstateWithCategoryDto>(query, parameters);
                 return values.ToList();
             }
         }
@@ -114,7 +127,7 @@ namespace PresentationAPI.Services.EstateServices
 
         public async Task UpdateEstateAsync(UpdateEstateDto updateEstateDto)
         {
-            string query = "update estate set title = @title, price = @price, image = @image, city = @city, district = @district, address = @address, description = @description, sales_type = @sales_type, category_id = @category_id, employee_id = @employee_id where estate_id = @estate_id";
+            string query = "update estate set title = @title, price = @price, image = @image, city = @city, district = @district, address = @address, description = @description, sales_type = @sales_type, category_id = @category_id, employee_id = @employee_id, app_user_id = @app_user_id where estate_id = @estate_id";
             var parameters = new DynamicParameters();
             parameters.Add("@title", updateEstateDto.title);
             parameters.Add("@price", updateEstateDto.price);
@@ -126,6 +139,7 @@ namespace PresentationAPI.Services.EstateServices
             parameters.Add("@sales_type", updateEstateDto.sales_type);
             parameters.Add("@category_id", updateEstateDto.category_id);
             parameters.Add("@employee_id", updateEstateDto.employee_id);
+            parameters.Add("@app_user_id", updateEstateDto.app_user_id);
             parameters.Add("@estate_id", updateEstateDto.estate_id);
             using (var connection = _dapperContext.CreateConnection())
             {

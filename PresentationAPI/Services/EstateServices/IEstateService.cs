@@ -13,5 +13,6 @@ namespace PresentationAPI.Services.EstateServices
         Task UpdateDealOfDayChangeToTrueAsync(int id);
         Task UpdateDealOfDayChangeToFalseAsync(int id);
         Task<List<ResultEstateWithCategoryDto>> ListLastEstateAsync();
+        Task<List<ResultEstateWithCategoryDto>> ListEstateByEstateAgentAsync(int id);
     }
 }

@@ -15,7 +15,7 @@ namespace PresentationAPI.Services.EmployeeServices
 
         public async Task CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
         {
-            string query = "insert into employee (name, title, mail, phone, image, status) values (@name, @title, @mail, @phone, @image, @status)";
+            string query = "insert into employee (name, title, mail, phone, image, status, app_user_id) values (@name, @title, @mail, @phone, @image, @status, @app_user_id)";
             var parameters = new DynamicParameters();
             parameters.Add("@name", createEmployeeDto.name);
             parameters.Add("@title", createEmployeeDto.title);
@@ -23,6 +23,7 @@ namespace PresentationAPI.Services.EmployeeServices
             parameters.Add("@phone", createEmployeeDto.phone);
             parameters.Add("@image", createEmployeeDto.image);
             parameters.Add("@status", true);
+            parameters.Add("@app_user_id", createEmployeeDto.app_user_id);
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
@@ -64,13 +65,14 @@ namespace PresentationAPI.Services.EmployeeServices
 
         public async Task UpdateEmployeeAsync(UpdateEmployeeDto updateEmployeeDto)
         {
-            string query = "update employee set name = @name, title = @title, mail = @mail, phone = @phone, image = @image where employee_id = @employee_id";
+            string query = "update employee set name = @name, title = @title, mail = @mail, phone = @phone, image = @image, app_user_id = @app_user_id where employee_id = @employee_id";
             var parameters = new DynamicParameters();
             parameters.Add("@name", updateEmployeeDto.name);
             parameters.Add("@title", updateEmployeeDto.title);
             parameters.Add("@mail", updateEmployeeDto.mail);
             parameters.Add("@phone", updateEmployeeDto.phone);
             parameters.Add("@image", updateEmployeeDto.image);
+            parameters.Add("@app_user_id", updateEmployeeDto.app_user_id);
             parameters.Add("@employee_id", updateEmployeeDto.employee_id);
             using (var connection = _context.CreateConnection())
             {

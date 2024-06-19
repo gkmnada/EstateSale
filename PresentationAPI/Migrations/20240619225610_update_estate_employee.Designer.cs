@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PresentationAPI.Context;
@@ -11,9 +12,11 @@ using PresentationAPI.Context;
 namespace PresentationAPI.Migrations
 {
     [DbContext(typeof(DapperContext))]
-    partial class DapperContextModelSnapshot : ModelSnapshot
+    [Migration("20240619225610_update_estate_employee")]
+    partial class update_estate_employee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

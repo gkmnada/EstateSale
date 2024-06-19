@@ -12,5 +12,6 @@ namespace PresentationAPI.Entities
         public string phone { get; set; }
         public string image { get; set; }
         public bool status { get; set; }
+        public int app_user_id { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace PresentationAPI.Entities
         public int employee_id { get; set; }
         public bool deal_of_day { get; set; }
         public bool status { get; set; }
+        public int app_user_id { get; set; }
     }
 }

@@ -78,5 +78,12 @@ namespace PresentationAPI.Controllers
             var values = await _estateService.ListLastEstateAsync();
             return Ok(values);
         }
+
+        [HttpGet("ListEstateByEstateAgent")]
+        public async Task<IActionResult> ListEstateByEstateAgent(int id)
+        {
+            var values = await _estateService.ListEstateByEstateAgentAsync(id);
+            return Ok(values);
+        }
     }
 }

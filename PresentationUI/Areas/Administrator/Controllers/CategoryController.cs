@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PresentationUI.Areas.Administrator.Models;
 using PresentationUI.Dtos.CategoryDto;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
+    [Authorize]
     [Area("Administrator")]
     public class CategoryController : Controller
     {
@@ -19,6 +22,18 @@ namespace PresentationUI.Areas.Administrator.Controllers
         public async Task<IActionResult> Index()
         {
             var client = _clientFactory.CreateClient();
+
+            var token = HttpContext.Session.GetString("estatesale");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
+
             var response = await client.GetAsync("https://localhost:7071/api/Category");
             if (response.IsSuccessStatusCode)
             {

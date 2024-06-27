@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Text;
 using PresentationUI.Dtos.LoginDto;
+using Microsoft.AspNetCore.Http;
 
 namespace PresentationUI.Controllers
 {
@@ -42,6 +43,8 @@ namespace PresentationUI.Controllers
 
                 if (tokenModel != null)
                 {
+                    HttpContext.Session.SetString("estatesale", tokenModel.Token);
+
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                     var token = tokenHandler.ReadJwtToken(tokenModel.Token);
                     var claims = token.Claims.ToList();

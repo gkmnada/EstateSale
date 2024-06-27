@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PresentationUI.Areas.Administrator.Models;
 using PresentationUI.Dtos.PopularLocationDto;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
+    [Authorize]
     [Area("Administrator")]
     public class LocationController : Controller
     {
@@ -18,7 +21,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var responseMessage = await client.GetAsync("https://localhost:7071/api/PopularLocation");
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -38,7 +41,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateLocation(CreatePopularLocationDto createPopularLocationDto)
         {
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var jsonData = JsonConvert.SerializeObject(createPopularLocationDto);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
             var responseMessage = await client.PostAsync("https://localhost:7071/api/PopularLocation", content);
@@ -51,7 +54,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> DeleteLocation(int id)
         {
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var responseMessage = await client.DeleteAsync("https://localhost:7071/api/PopularLocation?id=" + id);
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -63,7 +66,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateLocation(int id)
         {
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var responseMessage = await client.GetAsync("https://localhost:7071/api/PopularLocation/GetPopularLocation?id=" + id);
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -82,7 +85,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateLocation(UpdatePopularLocationDto updatePopularLocationDto)
         {
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var jsonData = JsonConvert.SerializeObject(updatePopularLocationDto);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
             var responseMessage = await client.PutAsync("https://localhost:7071/api/PopularLocation", content);

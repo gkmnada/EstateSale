@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using PresentationUI.Handlers;
 using PresentationUI.Services;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -22,6 +23,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddCo
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 
 builder.Services.AddScoped<ILoginService, LoginService>();
+
+builder.Services.AddTransient<AuthorizedHttpClientHandler>();
+builder.Services.AddHttpClient("AuthorizedClient").AddHttpMessageHandler<AuthorizedHttpClientHandler>();
 
 builder.Services.AddControllersWithViews();
 

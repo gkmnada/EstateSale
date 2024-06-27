@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PresentationAPI.Dtos.PopularLocationDto;
 using PresentationAPI.Services.PopularLocationServices;
 
 namespace PresentationAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PopularLocationController : ControllerBase

@@ -21,19 +21,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient();
-
-            var token = HttpContext.Session.GetString("estatesale");
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Login", new { area = "" });
-            }
-
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var response = await client.GetAsync("https://localhost:7071/api/Category");
             if (response.IsSuccessStatusCode)
             {
@@ -53,7 +41,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
         {
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var json = JsonConvert.SerializeObject(createCategoryDto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PostAsync("https://localhost:7071/api/Category", content);
@@ -66,7 +54,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var response = await client.DeleteAsync("https://localhost:7071/api/Category?id=" + id);
             if (response.IsSuccessStatusCode)
             {
@@ -78,7 +66,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateCategory(int id)
         {
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var response = await client.GetAsync("https://localhost:7071/api/Category/GetCategory?id=" + id);
             if (response.IsSuccessStatusCode)
             {
@@ -97,7 +85,7 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategoryDto)
         {
-            var client = _clientFactory.CreateClient();
+            var client = _clientFactory.CreateClient("AuthorizedClient");
             var json = JsonConvert.SerializeObject(updateCategoryDto);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PutAsync("https://localhost:7071/api/Category", content);

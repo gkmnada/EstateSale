@@ -43,8 +43,6 @@ namespace PresentationUI.Controllers
 
                 if (tokenModel != null)
                 {
-                    HttpContext.Session.SetString("estatesale", tokenModel.Token);
-
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                     var token = tokenHandler.ReadJwtToken(tokenModel.Token);
                     var claims = token.Claims.ToList();

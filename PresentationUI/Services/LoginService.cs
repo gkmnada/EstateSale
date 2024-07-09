@@ -11,6 +11,6 @@ namespace PresentationUI.Services
             _contextAccessor = contextAccessor;
         }
 
-        public string GetUserID => _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        public string GetUserId => _contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
     }
 }

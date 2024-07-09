@@ -13,6 +13,5 @@
         public string sales_type { get; set; }
         public int category_id { get; set; }
         public int employee_id { get; set; }
-        public int app_user_id { get; set; }
     }
 }

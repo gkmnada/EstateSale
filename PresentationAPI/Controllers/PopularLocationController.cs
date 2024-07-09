@@ -6,7 +6,6 @@ using PresentationAPI.Services.PopularLocationServices;
 
 namespace PresentationAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PopularLocationController : ControllerBase

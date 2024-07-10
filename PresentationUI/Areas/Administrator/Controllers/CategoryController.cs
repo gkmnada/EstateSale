@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PresentationUI.Areas.Administrator.Models;
 using PresentationUI.Dtos.CategoryDto;
-using System.Net.Http.Headers;
-using System.Text;
+using PresentationUI.Services.CategoryServices;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
@@ -12,24 +10,17 @@ namespace PresentationUI.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class CategoryController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(IHttpClientFactory clientFactory)
+        public CategoryController(ICategoryService categoryService)
         {
-            _clientFactory = clientFactory;
+            _categoryService = categoryService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var response = await client.GetAsync("https://localhost:7071/api/Category");
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                var categories = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(json);
-                return View(categories);
-            }
-            return View();
+            var values = await _categoryService.ListCategoryAsync();
+            return View(values);
         }
 
         [HttpGet]
@@ -41,11 +32,9 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var json = JsonConvert.SerializeObject(createCategoryDto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("https://localhost:7071/api/Category", content);
-            if (response.IsSuccessStatusCode)
+            await _categoryService.CreateCategoryAsync(createCategoryDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Category", new { area = "Administrator" });
             }
@@ -54,42 +43,28 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var response = await client.DeleteAsync("https://localhost:7071/api/Category?id=" + id);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Category", new { area = "Administrator" });
-            }
-            return View();
+            await _categoryService.DeleteCategoryAsync(id);
+            return RedirectToAction("Index", "Category", new { area = "Administrator" });
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateCategory(int id)
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var response = await client.GetAsync("https://localhost:7071/api/Category/GetCategory?id=" + id);
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                var value = JsonConvert.DeserializeObject<GetCategoryDto>(json);
+            var value = await _categoryService.GetCategoryAsync(id);
 
-                var categoryViewModel = new CategoryViewModel
-                {
-                    GetCategoryDto = value
-                };
-                return View(categoryViewModel);
-            }
-            return View();
+            var categoryViewModel = new CategoryViewModel
+            {
+                GetCategoryDto = value
+            };
+            return View(categoryViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategoryDto)
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var json = JsonConvert.SerializeObject(updateCategoryDto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync("https://localhost:7071/api/Category", content);
-            if (response.IsSuccessStatusCode)
+            await _categoryService.UpdateCategoryAsync(updateCategoryDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Category", new { area = "Administrator" });
             }

@@ -50,5 +50,12 @@ namespace PresentationAPI.Controllers
             await _contactService.DeleteContactAsync(id);
             return Ok("Başarılı");
         }
+
+        [HttpGet("ListLastContact")]
+        public async Task<IActionResult> ListLastContact()
+        {
+            var values = await _contactService.ListLastContactAsync();
+            return Ok(values);
+        }
     }
 }

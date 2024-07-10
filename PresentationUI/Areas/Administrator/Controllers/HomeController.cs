@@ -1,52 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using PresentationUI.Services.StatisticServices;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
+    [Authorize]
     [Area("Administrator")]
     public class HomeController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IStatisticService _statisticService;
 
-        public HomeController(IHttpClientFactory clientFactory)
+        public HomeController(IStatisticService statisticService)
         {
-            _clientFactory = clientFactory;
+            _statisticService = statisticService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/Statistic/GetActiveCategoryCount");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<int>(jsonData);
-                ViewBag.CategoryCount = values;
-            }
+            var categoryCount = await _statisticService.GetActiveCategoryCountAsync();
+            ViewBag.CategoryCount = categoryCount;
 
-            var responseMessage2 = await client.GetAsync("https://localhost:7071/api/Statistic/GetEstateCount");
-            if (responseMessage2.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage2.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<int>(jsonData);
-                ViewBag.EstateCount = values;
-            }
+            var estateCount = await _statisticService.GetEstateCountAsync();
+            ViewBag.EstateCount = estateCount;
 
-            var responseMessage3 = await client.GetAsync("https://localhost:7071/api/Statistic/GetAverageEstatePriceByRent");
-            if (responseMessage3.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage3.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<decimal>(jsonData);
-                ViewBag.AverageEstatePriceByRent = Math.Round(values, 2);
-            }
+            var avgEstatePriceByRent = await _statisticService.GetAverageEstatePriceByRentAsync();
+            ViewBag.AverageEstatePriceByRent = Math.Round(avgEstatePriceByRent, 2);
 
-            var responseMessage4 = await client.GetAsync("https://localhost:7071/api/Statistic/GetAverageEstatePriceBySale");
-            if (responseMessage4.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage4.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<decimal>(jsonData);
-                ViewBag.AverageEstatePriceBySale = Math.Round(values, 2);
-            }
+            var avgEstatePriceBySale = await _statisticService.GetAverageEstatePriceBySaleAsync();
+            ViewBag.AverageEstatePriceBySale = Math.Round(avgEstatePriceBySale, 2);
 
             return View();
         }

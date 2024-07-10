@@ -1,4 +1,4 @@
-﻿namespace PresentationUI.Services
+﻿namespace PresentationUI.Services.LoginServices
 {
     public interface ILoginService
     {

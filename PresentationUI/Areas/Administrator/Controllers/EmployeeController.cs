@@ -1,32 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PresentationUI.Areas.Administrator.Models;
 using PresentationUI.Dtos.EmployeeDto;
-using System.Text;
+using PresentationUI.Services.EmployeeServices;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
+    [Authorize]
     [Area("Administrator")]
     public class EmployeeController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeeController(IHttpClientFactory clientFactory)
+        public EmployeeController(IEmployeeService employeeService)
         {
-            _clientFactory = clientFactory;
+            _employeeService = employeeService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7071/api/Employee");
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = await response.Content.ReadAsStringAsync();
-                var employees = JsonConvert.DeserializeObject<List<ResultEmployeeDto>>(jsonData);
-                return View(employees);
-            }
-            return View();
+            var employees = await _employeeService.ListEmployeeAsync();
+            return View(employees);
         }
 
         [HttpGet]
@@ -38,11 +32,9 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEmployee(CreateEmployeeDto createEmployeeDto)
         {
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(createEmployeeDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("https://localhost:7071/api/Employee", content);
-            if (response.IsSuccessStatusCode)
+            await _employeeService.CreateEmployeeAsync(createEmployeeDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Employee", new { area = "Administrator" });
             }
@@ -51,42 +43,28 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> DeleteEmployee(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.DeleteAsync("https://localhost:7071/api/Employee?id=" + id);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Employee", new { area = "Administrator" });
-            }
-            return View();
+            await _employeeService.DeleteEmployeeAsync(id);
+            return RedirectToAction("Index", "Employee", new { area = "Administrator" });
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateEmployee(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7071/api/Employee/GetEmployee?id=" + id);
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonData = await response.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<GetEmployeeDto>(jsonData);
+            var values = await _employeeService.GetEmployeeAsync(id);
 
-                var employeeViewModel = new EmployeeViewModel
-                {
-                    GetEmployeeDto = values
-                };
-                return View(employeeViewModel);
-            }
-            return View();
+            var employeeViewModel = new EmployeeViewModel
+            {
+                GetEmployeeDto = values
+            };
+            return View(employeeViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateEmployee(UpdateEmployeeDto updateEmployeeDto)
         {
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(updateEmployeeDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync("https://localhost:7071/api/Employee", content);
-            if (response.IsSuccessStatusCode)
+            await _employeeService.UpdateEmployeeAsync(updateEmployeeDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Employee", new { area = "Administrator" });
             }

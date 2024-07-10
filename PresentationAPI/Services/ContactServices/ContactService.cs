@@ -60,6 +60,16 @@ namespace PresentationAPI.Services.ContactServices
             }
         }
 
+        public async Task<List<ResultContactDto>> ListLastContactAsync()
+        {
+            string query = "select * from contact order by created_at desc limit 5";
+            using (var connection = _dapperContext.CreateConnection())
+            {
+                var values = await connection.QueryAsync<ResultContactDto>(query);
+                return values.ToList();
+            }
+        }
+
         public async Task UpdateContactAsync(UpdateContactDto updateContactDto)
         {
             string query = "update contact set name = @name, email = @email, message = @message where contact_id = @contact_id";

@@ -1,29 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using PresentationUI.Dtos.EstateDto;
+using PresentationUI.Services.EstateServices;
 
 namespace PresentationUI.Areas.Administrator.ViewComponents.Home
 {
     public class _AdminHomeEstateList : ViewComponent
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IEstateService _estateService;
 
-        public _AdminHomeEstateList(IHttpClientFactory clientFactory)
+        public _AdminHomeEstateList(IEstateService estateService)
         {
-            _clientFactory = clientFactory;
+            _estateService = estateService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/Estate/ListLastEstate");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultEstateWithCategoryDto>>(jsonData);
-                return View(values);
-            }
-            return View();
+            var values = await _estateService.ListLastEstateAsync();
+            return View(values);
         }
     }
 }

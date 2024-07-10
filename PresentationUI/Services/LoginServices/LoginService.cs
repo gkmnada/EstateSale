@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace PresentationUI.Services
+namespace PresentationUI.Services.LoginServices
 {
     public class LoginService : ILoginService
     {

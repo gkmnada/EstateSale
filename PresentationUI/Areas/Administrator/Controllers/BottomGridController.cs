@@ -1,32 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PresentationUI.Areas.Administrator.Models;
 using PresentationUI.Dtos.BottomGridDto;
-using System.Text;
+using PresentationUI.Services.BottomGridServices;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
+    [Authorize]
     [Area("Administrator")]
     public class BottomGridController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IBottomGridService _bottomGridService;
 
-        public BottomGridController(IHttpClientFactory clientFactory)
+        public BottomGridController(IBottomGridService bottomGridService)
         {
-            _clientFactory = clientFactory;
+            _bottomGridService = bottomGridService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/BottomGrid");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultBottomGridDto>>(jsonData);
-                return View(values);
-            }
-            return View();
+            var values = await _bottomGridService.ListBottomGridAsync();
+            return View(values);
         }
 
         [HttpGet]
@@ -38,11 +32,9 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBottomGrid(CreateBottomGridDto createBottomGridDto)
         {
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(createBottomGridDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PostAsync("https://localhost:7071/api/BottomGrid", content);
-            if (responseMessage.IsSuccessStatusCode)
+            await _bottomGridService.CreateBottomGridAsync(createBottomGridDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "BottomGrid", new { area = "Administrator" });
             }
@@ -51,42 +43,28 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> DeleteBottomGrid(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.DeleteAsync("https://localhost:7071/api/BottomGrid?id=" + id);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "BottomGrid", new { area = "Administrator" });
-            }
-            return View();
+            await _bottomGridService.DeleteBottomGridAsync(id);
+            return RedirectToAction("Index", "BottomGrid", new { area = "Administrator" });
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateBottomGrid(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/BottomGrid/GetBottomGrid?id=" + id);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<GetBottomGridDto>(jsonData);
+            var values = await _bottomGridService.GetBottomGridAsync(id);
 
-                var bottomGridViewModel = new BottomGridViewModel
-                {
-                    GetBottomGridDto = values
-                };
-                return View(bottomGridViewModel);
-            }
-            return View();
+            var bottomGridViewModel = new BottomGridViewModel
+            {
+                GetBottomGridDto = values
+            };
+            return View(bottomGridViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateBottomGrid(UpdateBottomGridDto updateBottomGridDto)
         {
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(updateBottomGridDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PutAsync("https://localhost:7071/api/BottomGrid", content);
-            if (responseMessage.IsSuccessStatusCode)
+            await _bottomGridService.UpdateBottomGridAsync(updateBottomGridDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "BottomGrid", new { area = "Administrator" });
             }

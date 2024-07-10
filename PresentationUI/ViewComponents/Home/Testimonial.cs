@@ -1,29 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using PresentationUI.Dtos.TestimonialDto;
+using PresentationUI.Services.TestimonialServices;
 
 namespace PresentationUI.ViewComponents.Home
 {
     public class Testimonial : ViewComponent
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly ITestimonialService _testimonialService;
 
-        public Testimonial(IHttpClientFactory clientFactory)
+        public Testimonial(ITestimonialService testimonialService)
         {
-            _clientFactory = clientFactory;
+            _testimonialService = testimonialService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7071/api/Testimonial");
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultTestimonialDto>>(json);
-                return View(values);
-            }
-            return View();
+            var values = await _testimonialService.ListTestimonialAsync();
+            return View(values);
         }
     }
 }

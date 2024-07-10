@@ -1,24 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using PresentationAPI.Context;
 using PresentationAPI.Hubs;
-using PresentationAPI.Services.AboutServices;
-using PresentationAPI.Services.AddressServices;
-using PresentationAPI.Services.BottomGridServices;
-using PresentationAPI.Services.CategoryServices;
-using PresentationAPI.Services.ClientServices;
-using PresentationAPI.Services.ContactServices;
-using PresentationAPI.Services.EmployeeServices;
-using PresentationAPI.Services.EstateDetailServices;
-using PresentationAPI.Services.EstateServices;
-using PresentationAPI.Services.PopularLocationServices;
-using PresentationAPI.Services.ServiceServices;
-using PresentationAPI.Services.StatisticServices;
-using PresentationAPI.Services.TestimonialServices;
 using PresentationAPI.Tools;
+using PresentationAPI.Registration;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -33,23 +22,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
-builder.Services.AddHttpClient();
-
-builder.Services.AddTransient<DapperContext>();
-
-builder.Services.AddTransient<ICategoryService, CategoryService>();
-builder.Services.AddTransient<IEstateService, EstateService>();
-builder.Services.AddTransient<IAboutService, AboutService>();
-builder.Services.AddTransient<IServiceService, ServiceService>();
-builder.Services.AddTransient<IBottomGridService, BottomGridService>();
-builder.Services.AddTransient<IPopularLocationService, PopularLocationService>();
-builder.Services.AddTransient<ITestimonialService, TestimonialService>();
-builder.Services.AddTransient<IEmployeeService, EmployeeService>();
-builder.Services.AddTransient<IClientService, ClientService>();
-builder.Services.AddTransient<IEstateDetailService, EstateDetailService>();
-builder.Services.AddTransient<IStatisticService, StatisticService>();
-builder.Services.AddTransient<IContactService, ContactService>();
-builder.Services.AddTransient<IAddressService, AddressService>();
+builder.Services.ApiService(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {

@@ -9,5 +9,6 @@ namespace PresentationAPI.Services.ContactServices
         Task UpdateContactAsync(UpdateContactDto updateContactDto);
         Task DeleteContactAsync(int id);
         Task<GetContactDto> GetContactAsync(int id);
+        Task<List<ResultContactDto>> ListLastContactAsync();
     }
 }

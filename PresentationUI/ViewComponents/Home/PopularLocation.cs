@@ -1,29 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using PresentationUI.Dtos.PopularLocationDto;
+using PresentationUI.Services.PopularLocationServices;
 
 namespace PresentationUI.ViewComponents.Home
 {
     public class PopularLocation : ViewComponent
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IPopularLocationService _popularLocationService;
 
-        public PopularLocation(IHttpClientFactory clientFactory)
+        public PopularLocation(IPopularLocationService popularLocationService)
         {
-            _clientFactory = clientFactory;
+            _popularLocationService = popularLocationService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/PopularLocation");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var popularLocation = JsonConvert.DeserializeObject<List<ResultPopularLocationDto>>(jsonData);
-                return View(popularLocation);
-            }
-            return View();
+            var values = await _popularLocationService.ListPopularLocationAsync();
+            return View(values);
         }
     }
 }

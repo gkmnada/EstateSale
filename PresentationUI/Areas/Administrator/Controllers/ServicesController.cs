@@ -1,32 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PresentationUI.Areas.Administrator.Models;
 using PresentationUI.Dtos.ServiceDto;
-using System.Text;
+using PresentationUI.Services.ServiceServices;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
+    [Authorize]
     [Area("Administrator")]
     public class ServicesController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IServiceService _serviceService;
 
-        public ServicesController(IHttpClientFactory clientFactory)
+        public ServicesController(IServiceService serviceService)
         {
-            _clientFactory = clientFactory;
+            _serviceService = serviceService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/Service");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultServiceDto>>(jsonData);
-                return View(values);
-            }
-            return View();
+            var values = await _serviceService.ListServiceAsync();
+            return View(values);
         }
 
         [HttpGet]
@@ -38,11 +32,9 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateService(CreateServiceDto createServiceDto)
         {
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(createServiceDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PostAsync("https://localhost:7071/api/Service", content);
-            if (responseMessage.IsSuccessStatusCode)
+            await _serviceService.CreateServiceAsync(createServiceDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Services", new { area = "Administrator" });
             }
@@ -51,42 +43,28 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> DeleteService(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.DeleteAsync("https://localhost:7071/api/Service?id=" + id);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Services", new { area = "Administrator" });
-            }
-            return View();
+            await _serviceService.DeleteServiceAsync(id);
+            return RedirectToAction("Index", "Services", new { area = "Administrator" });
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateService(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/Service/GetService?id=" + id);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<GetServiceDto>(jsonData);
+            var values = await _serviceService.GetServiceAsync(id);
 
-                var servicesViewModel = new ServicesViewModel
-                {
-                    GetServiceDto = values
-                };
-                return View(servicesViewModel);
-            }
-            return View();
+            var servicesViewModel = new ServicesViewModel
+            {
+                GetServiceDto = values
+            };
+            return View(servicesViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateService(UpdateServiceDto updateServiceDto)
         {
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(updateServiceDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PutAsync("https://localhost:7071/api/Service", content);
-            if (responseMessage.IsSuccessStatusCode)
+            await _serviceService.UpdateServiceAsync(updateServiceDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Services", new { area = "Administrator" });
             }

@@ -1,34 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PresentationUI.Areas.Administrator.Models;
 using PresentationUI.Dtos.PopularLocationDto;
-using System.Net.Http.Headers;
-using System.Text;
+using PresentationUI.Services.PopularLocationServices;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
+    [Authorize]
     [Area("Administrator")]
     public class LocationController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IPopularLocationService _popularLocationService;
 
-        public LocationController(IHttpClientFactory clientFactory)
+        public LocationController(IPopularLocationService popularLocationService)
         {
-            _clientFactory = clientFactory;
+            _popularLocationService = popularLocationService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/PopularLocation");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultPopularLocationDto>>(jsonData);
-                return View(values);
-            }
-            return View();
+            var values = await _popularLocationService.ListPopularLocationAsync();
+            return View(values);
         }
 
         [HttpGet]
@@ -40,11 +32,9 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateLocation(CreatePopularLocationDto createPopularLocationDto)
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var jsonData = JsonConvert.SerializeObject(createPopularLocationDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PostAsync("https://localhost:7071/api/PopularLocation", content);
-            if (responseMessage.IsSuccessStatusCode)
+            await _popularLocationService.CreatePopularLocationAsync(createPopularLocationDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Location", new { area = "Administrator" });
             }
@@ -53,42 +43,28 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> DeleteLocation(int id)
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var responseMessage = await client.DeleteAsync("https://localhost:7071/api/PopularLocation?id=" + id);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Location", new { area = "Administrator" });
-            }
-            return View();
+            await _popularLocationService.DeletePopularLocationAsync(id);
+            return RedirectToAction("Index", "Location", new { area = "Administrator" });
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateLocation(int id)
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/PopularLocation/GetPopularLocation?id=" + id);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<GetPopularLocationDto>(jsonData);
+            var values = await _popularLocationService.GetPopularLocationsAsync(id);
 
-                var locationViewModel = new LocationViewModel
-                {
-                    GetPopularLocationDto = values
-                };
-                return View(locationViewModel);
-            }
-            return View();
+            var locationViewModel = new LocationViewModel
+            {
+                GetPopularLocationDto = values
+            };
+            return View(locationViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateLocation(UpdatePopularLocationDto updatePopularLocationDto)
         {
-            var client = _clientFactory.CreateClient("AuthorizedClient");
-            var jsonData = JsonConvert.SerializeObject(updatePopularLocationDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PutAsync("https://localhost:7071/api/PopularLocation", content);
-            if (responseMessage.IsSuccessStatusCode)
+            await _popularLocationService.UpdatePopularLocationAsync(updatePopularLocationDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Location", new { area = "Administrator" });
             }

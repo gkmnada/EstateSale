@@ -1,32 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PresentationUI.Areas.Administrator.Models;
 using PresentationUI.Dtos.AboutDto;
-using System.Text;
+using PresentationUI.Services.AboutServices;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
+    [Authorize]
     [Area("Administrator")]
     public class AboutController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IAboutService _aboutService;
 
-        public AboutController(IHttpClientFactory clientFactory)
+        public AboutController(IAboutService aboutService)
         {
-            _clientFactory = clientFactory;
+            _aboutService = aboutService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/About");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultAboutDto>>(jsonData);
-                return View(values);
-            }
-            return View();
+            var values = await _aboutService.ListAboutAsync();
+            return View(values);
         }
 
         [HttpGet]
@@ -38,11 +32,9 @@ namespace PresentationUI.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAbout(CreateAboutDto createAboutDto)
         {
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(createAboutDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PostAsync("https://localhost:7071/api/About", content);
-            if (responseMessage.IsSuccessStatusCode)
+            await _aboutService.CreateAboutAsync(createAboutDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "About", new { area = "Administrator" });
             }
@@ -51,42 +43,28 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> DeleteAbout(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.DeleteAsync("https://localhost:7071/api/About?id=" + id);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "About", new { area = "Administrator" });
-            }
-            return View();
+            await _aboutService.DeleteAboutAsync(id);
+            return RedirectToAction("Index", "About", new { area = "Administrator" });
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateAbout(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/About/GetAbout?id=" + id);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<GetAboutDto>(jsonData);
+            var values = await _aboutService.GetAboutAsync(id);
 
-                var aboutViewModel = new AboutViewModel
-                {
-                    GetAboutDto = values
-                };
-                return View(aboutViewModel);
-            }
-            return View();
+            var aboutViewModel = new AboutViewModel
+            {
+                GetAboutDto = values
+            };
+            return View(aboutViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateAbout(UpdateAboutDto updateAboutDto)
         {
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(updateAboutDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PutAsync("https://localhost:7071/api/About", content);
-            if (responseMessage.IsSuccessStatusCode)
+            await _aboutService.UpdateAboutAsync(updateAboutDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "About", new { area = "Administrator" });
             }

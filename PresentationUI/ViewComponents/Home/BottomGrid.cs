@@ -1,29 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using PresentationUI.Dtos.BottomGridDto;
+using PresentationUI.Services.BottomGridServices;
 
 namespace PresentationUI.ViewComponents.Home
 {
     public class BottomGrid : ViewComponent
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IBottomGridService _bottomGridService;
 
-        public BottomGrid(IHttpClientFactory clientFactory)
+        public BottomGrid(IBottomGridService bottomGridService)
         {
-            _clientFactory = clientFactory;
+            _bottomGridService = bottomGridService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/BottomGrid");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultBottomGridDto>>(jsonData);
-                return View(values);
-            }
-            return View();
+            var values = await _bottomGridService.ListBottomGridAsync();
+            return View(values);
         }
     }
 }

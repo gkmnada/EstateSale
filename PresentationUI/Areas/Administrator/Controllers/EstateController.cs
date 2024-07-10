@@ -1,81 +1,67 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
 using PresentationUI.Areas.Administrator.Models;
-using PresentationUI.Dtos.CategoryDto;
-using PresentationUI.Dtos.EmployeeDto;
 using PresentationUI.Dtos.EstateDto;
-using System.Text;
+using PresentationUI.Services.CategoryServices;
+using PresentationUI.Services.EmployeeServices;
+using PresentationUI.Services.EstateServices;
 
 namespace PresentationUI.Areas.Administrator.Controllers
 {
+    [Authorize]
     [Area("Administrator")]
     public class EstateController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IEstateService _estateService;
+        private readonly ICategoryService _categoryService;
+        private readonly IEmployeeService _employeeService;
 
-        public EstateController(IHttpClientFactory clientFactory)
+        public EstateController(IEstateService estateService, ICategoryService categoryService, IEmployeeService employeeService)
         {
-            _clientFactory = clientFactory;
+            _estateService = estateService;
+            _categoryService = categoryService;
+            _employeeService = employeeService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7071/api/Estate/ListEstateWithCategory");
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultEstateWithCategoryDto>>(json);
-                return View(values);
-            }
-            return View();
+            var values = await _estateService.ListEstateWithCategoryAsync();
+            return View(values);
         }
 
         [HttpGet]
         public async Task<IActionResult> CreateEstate()
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7071/api/Category");
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(json);
+            var categories = await _categoryService.ListCategoryAsync();
 
-                List<SelectListItem> listCategory = (from x in values
-                                                     select new SelectListItem
-                                                     {
-                                                         Text = x.category_name,
-                                                         Value = x.category_id.ToString()
-                                                     }).ToList();
-                ViewBag.Category = listCategory;
-            }
+            List<SelectListItem> listCategory = (from x in categories
+                                                 select new SelectListItem
+                                                 {
+                                                     Text = x.category_name,
+                                                     Value = x.category_id.ToString()
+                                                 }).ToList();
+            ViewBag.Category = listCategory;
 
-            var response2 = await client.GetAsync("https://localhost:7071/api/Employee");
-            if (response2.IsSuccessStatusCode)
-            {
-                var json = await response2.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultEmployeeDto>>(json);
+            var employees = await _employeeService.ListEmployeeAsync();
 
-                List<SelectListItem> listEmployee = (from x in values
-                                                     select new SelectListItem
-                                                     {
-                                                         Text = x.name,
-                                                         Value = x.employee_id.ToString()
-                                                     }).ToList();
-                ViewBag.Employee = listEmployee;
-            }
+            List<SelectListItem> listEmployee = (from x in employees
+                                                 select new SelectListItem
+                                                 {
+                                                     Text = x.name,
+                                                     Value = x.employee_id.ToString()
+                                                 }).ToList();
+            ViewBag.Employee = listEmployee;
+
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateEstate(CreateEstateDto createEstateDto)
         {
-            var client = _clientFactory.CreateClient();
-            var json = JsonConvert.SerializeObject(createEstateDto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("https://localhost:7071/api/Estate", content);
-            if (response.IsSuccessStatusCode)
+            await _estateService.CreateEstateAsync(createEstateDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Estate", new { area = "Administrator" });
             }
@@ -84,70 +70,52 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> DeleteEstate(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.DeleteAsync("https://localhost:7071/api/Estate?id=" + id);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Estate", new { area = "Administrator" });
-            }
-            return View();
+            await _estateService.DeleteEstateAsync(id);
+            return RedirectToAction("Index", "Estate", new { area = "Administrator" });
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateEstate(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7071/api/Estate/GetEstate?id=" + id);
-            if (response.IsSuccessStatusCode)
+            var values = await _estateService.GetEstateAsync(id);
+
+            ViewBag.SelectedCategory = values.category_id.ToString();
+            ViewBag.SelectedEmployee = values.employee_id.ToString();
+            ViewBag.SelectedSalesType = values.sales_type;
+
+            var categories = await _categoryService.ListCategoryAsync();
+
+            List<SelectListItem> listCategory = (from x in categories
+                                                 select new SelectListItem
+                                                 {
+                                                     Text = x.category_name,
+                                                     Value = x.category_id.ToString()
+                                                 }).ToList();
+            ViewBag.Category = listCategory;
+
+            var employees = await _employeeService.ListEmployeeAsync();
+
+            List<SelectListItem> listEmployee = (from x in employees
+                                                 select new SelectListItem
+                                                 {
+                                                     Text = x.name,
+                                                     Value = x.employee_id.ToString()
+                                                 }).ToList();
+            ViewBag.Employee = listEmployee;
+
+            var estateViewModel = new EstateViewModel
             {
-                var json = await response.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<GetEstateDto>(json);
-
-                ViewBag.SelectedCategory = values.category_id.ToString();
-                ViewBag.SelectedEmployee = values.employee_id.ToString();
-                ViewBag.SelectedSalesType = values.sales_type;
-
-                var responseMessage = await client.GetAsync("https://localhost:7071/api/Category");
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var categories = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(jsonData);
-
-                List<SelectListItem> listCategory = (from x in categories
-                                                     select new SelectListItem
-                                                     {
-                                                         Text = x.category_name,
-                                                         Value = x.category_id.ToString()
-                                                     }).ToList();
-                ViewBag.Category = listCategory;
-
-                var responseMessage2 = await client.GetAsync("https://localhost:7071/api/Employee");
-                var jsonData2 = await responseMessage2.Content.ReadAsStringAsync();
-                var employees = JsonConvert.DeserializeObject<List<ResultEmployeeDto>>(jsonData2);
-
-                List<SelectListItem> listEmployee = (from x in employees
-                                                     select new SelectListItem
-                                                     {
-                                                         Text = x.name,
-                                                         Value = x.employee_id.ToString()
-                                                     }).ToList();
-                ViewBag.Employee = listEmployee;
-
-                var estateViewModel = new EstateViewModel
-                {
-                    GetEstateDto = values
-                };
-                return View(estateViewModel);
-            }
-            return View();
+                GetEstateDto = values
+            };
+            return View(estateViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateEstate(UpdateEstateDto updateEstateDto)
         {
-            var client = _clientFactory.CreateClient();
-            var json = JsonConvert.SerializeObject(updateEstateDto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync("https://localhost:7071/api/Estate", content);
-            if (response.IsSuccessStatusCode)
+            await _estateService.UpdateEstateAsync(updateEstateDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Estate", new { area = "Administrator" });
             }
@@ -156,24 +124,14 @@ namespace PresentationUI.Areas.Administrator.Controllers
 
         public async Task<IActionResult> ChangeToTrue(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7071/api/Estate/UpdateDealOfDayChangeToTrue?id=" + id);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Estate", new { area = "Administrator" });
-            }
-            return View();
+            await _estateService.UpdateDealOfDayChangeToTrueAsync(id);
+            return RedirectToAction("Index", "Estate", new { area = "Administrator" });
         }
 
         public async Task<IActionResult> ChangeToFalse(int id)
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7071/api/Estate/UpdateDealOfDayChangeToFalse?id=" + id);
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Estate", new { area = "Administrator" });
-            }
-            return View();
+            await _estateService.UpdateDealOfDayChangeToFalseAsync(id);
+            return RedirectToAction("Index", "Estate", new { area = "Administrator" });
         }
     }
 }

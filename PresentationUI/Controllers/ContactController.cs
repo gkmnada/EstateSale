@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PresentationUI.Dtos.ContactDto;
-using System.Text;
+using PresentationUI.Services.ContactServices;
 
 namespace PresentationUI.Controllers
 {
     public class ContactController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IContactService _contactService;
 
-        public ContactController(IHttpClientFactory clientFactory)
+        public ContactController(IContactService contactService)
         {
-            _clientFactory = clientFactory;
+            _contactService = contactService;
         }
 
         public IActionResult Index()
@@ -22,11 +21,9 @@ namespace PresentationUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(CreateContactDto createContactDto)
         {
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(createContactDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("https://localhost:7071/api/Contact", content);
-            if (response.IsSuccessStatusCode)
+            await _contactService.CreateContactAsync(createContactDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Home");
             }

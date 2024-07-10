@@ -1,40 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using PresentationUI.Dtos.AboutDto;
-using PresentationUI.Dtos.ServiceDto;
+using PresentationUI.Services.AboutServices;
+using PresentationUI.Services.ServiceServices;
 
 namespace PresentationUI.ViewComponents.Home
 {
     public class About : ViewComponent
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IAboutService _aboutService;
+        private readonly IServiceService _serviceService;
 
-        public About(IHttpClientFactory clientFactory)
+        public About(IAboutService aboutService, IServiceService serviceService)
         {
-            _clientFactory = clientFactory;
+            _aboutService = aboutService;
+            _serviceService = serviceService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/About");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultAboutDto>>(jsonData);
+            var values = await _aboutService.ListAboutAsync();
 
-                ViewBag.Image = values.Select(x => x.image).FirstOrDefault();
-                ViewBag.Title = values.Select(x => x.title).FirstOrDefault();
-                ViewBag.Subtitle = values.Select(x => x.subtitle).FirstOrDefault();
-                ViewBag.Description1 = values.Select(x => x.description1).FirstOrDefault();
-                ViewBag.Description2 = values.Select(x => x.description2).FirstOrDefault();
+            ViewBag.Image = values.Select(x => x.image).FirstOrDefault();
+            ViewBag.Title = values.Select(x => x.title).FirstOrDefault();
+            ViewBag.Subtitle = values.Select(x => x.subtitle).FirstOrDefault();
+            ViewBag.Description1 = values.Select(x => x.description1).FirstOrDefault();
+            ViewBag.Description2 = values.Select(x => x.description2).FirstOrDefault();
 
-                var response = await client.GetAsync("https://localhost:7071/api/Service");
-                var json = await response.Content.ReadAsStringAsync();
-                var services = JsonConvert.DeserializeObject<List<ResultServiceDto>>(json);
-                return View(services);
-            }
-            return View();
+            var services = await _serviceService.ListServiceAsync();
+            return View(services);
         }
     }
 }

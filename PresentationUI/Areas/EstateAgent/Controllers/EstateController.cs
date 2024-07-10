@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
-using PresentationUI.Dtos.CategoryDto;
 using PresentationUI.Dtos.EstateDto;
-using PresentationUI.Services;
-using System.Text;
+using PresentationUI.Services.CategoryServices;
+using PresentationUI.Services.EstateServices;
+using PresentationUI.Services.LoginServices;
 
 namespace PresentationUI.Areas.EstateAgent.Controllers
 {
@@ -13,49 +12,37 @@ namespace PresentationUI.Areas.EstateAgent.Controllers
     [Area("EstateAgent")]
     public class EstateController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly IEstateService _estateService;
         private readonly ILoginService _loginService;
+        private readonly ICategoryService _categoryService;
 
-        public EstateController(IHttpClientFactory clientFactory, ILoginService loginService)
+        public EstateController(IEstateService estateService, ILoginService loginService, ICategoryService categoryService)
         {
-            _clientFactory = clientFactory;
+            _estateService = estateService;
             _loginService = loginService;
+            _categoryService = categoryService;
         }
 
         public async Task<IActionResult> Index()
         {
             var id = _loginService.GetUserId;
 
-            var client = _clientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7071/api/Estate/ListEstateByEstateAgent?id=" + id);
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultEstateWithCategoryDto>>(jsonData);
-                return View(values);
-            }
-            return View();
+            var values = await _estateService.ListEstateByEstateAgentAsync(int.Parse(id));
+            return View(values);
         }
 
         [HttpGet]
         public async Task<IActionResult> CreateEstate()
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync("https://localhost:7071/api/Category");
+            var values = await _categoryService.ListCategoryAsync();
 
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(json);
-
-                List<SelectListItem> listCategory = (from x in values
-                                                     select new SelectListItem
-                                                     {
-                                                         Text = x.category_name,
-                                                         Value = x.category_id.ToString()
-                                                     }).ToList();
-                ViewBag.Category = listCategory;
-            }
+            List<SelectListItem> listCategory = (from x in values
+                                                 select new SelectListItem
+                                                 {
+                                                     Text = x.category_name,
+                                                     Value = x.category_id.ToString()
+                                                 }).ToList();
+            ViewBag.Category = listCategory;
 
             return View();
         }
@@ -67,18 +54,14 @@ namespace PresentationUI.Areas.EstateAgent.Controllers
 
             createEstateDto.employee_id = int.Parse(id);
 
-            var client = _clientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(createEstateDto);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("https://localhost:7071/api/Estate", content);
-            if (response.IsSuccessStatusCode)
+            await _estateService.CreateEstateAsync(createEstateDto);
+
+            if (ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Estate", new { area = "EstateAgent" });
             }
-            else
-            {
-                return View();
-            }
+
+            return View();
         }
     }
 }
